@@ -153,3 +153,55 @@ Voraussetzungen in **FermenterControl → External MQTT → Externe Steuerungsre
 Das automatisch generierte FermenterControl-Dashboard enthält einen eigenen Tab **Profilarchiv**. Destruktive Aktionen werden dort mit einer Bestätigungsabfrage versehen.
 
 Der vollständige Mehrschritt-Editor bleibt in FermenterControl; Home Assistant dient für schnelle Auswahl, Archivierung und Verteilung.
+
+
+## Archivprofile direkt in Home Assistant bearbeiten
+
+Bei aktiviertem Recht **Profile bearbeiten** stellt FermenterControl per MQTT Discovery einen transaktionalen Editor für das zentrale Profilarchiv bereit.
+
+Der Editor arbeitet mit einem retained Entwurfszustand:
+
+```text
+fermentorcontrol/profile-archive/editor/state
+```
+
+Typische Entities:
+
+```text
+button.fermentorcontrol_profile_archive_editor_open
+binary_sensor.fermentorcontrol_profile_archive_editor_active
+binary_sensor.fermentorcontrol_profile_archive_editor_dirty
+binary_sensor.fermentorcontrol_profile_archive_editor_conflict
+
+text.fermentorcontrol_profile_archive_editor_name
+number.fermentorcontrol_profile_archive_editor_tolerance
+select.fermentorcontrol_profile_archive_editor_end_behavior
+
+sensor.fermentorcontrol_profile_archive_editor_step_count
+select.fermentorcontrol_profile_archive_editor_step
+number.fermentorcontrol_profile_archive_editor_setpoint
+number.fermentorcontrol_profile_archive_editor_duration
+select.fermentorcontrol_profile_archive_editor_timer
+select.fermentorcontrol_profile_archive_editor_advance
+number.fermentorcontrol_profile_archive_editor_density_target
+number.fermentorcontrol_profile_archive_editor_density_change
+
+button.fermentorcontrol_profile_archive_editor_add_step
+button.fermentorcontrol_profile_archive_editor_delete_step
+button.fermentorcontrol_profile_archive_editor_save
+button.fermentorcontrol_profile_archive_editor_cancel
+```
+
+Ablauf:
+
+1. Archivprofil auswählen.
+2. **Ausgewähltes Profil bearbeiten** drücken.
+3. Felder bzw. Profilschritte ändern.
+4. **Profiländerungen speichern** schreibt den vollständigen Entwurf nach Validierung in das zentrale Archiv.
+5. **Änderungen verwerfen** beendet den Editor ohne persistente Änderungen.
+
+Der Editierpuffer liegt in FermenterControl. Home Assistant schreibt daher nicht bei jeder einzelnen Feldänderung sofort in MongoDB.
+
+Zusätzlich schützt FermenterControl vor parallelen Änderungen: Wird das Profil nach Öffnen des Editors an anderer Stelle verändert, wird **Bearbeitungskonflikt** aktiv und ein veralteter Entwurf kann nicht gespeichert werden.
+
+Der automatisch generierte Dashboard-Tab **Profilarchiv** enthält den Editor bereits vollständig; es sind keine HACS-Karten oder manuell angelegten Helper erforderlich.
