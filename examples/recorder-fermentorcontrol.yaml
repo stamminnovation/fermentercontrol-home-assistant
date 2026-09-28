@@ -1,0 +1,23 @@
+# FermenterControl recorder example
+#
+# Add or merge this into Home Assistant configuration.yaml if you want to keep
+# full-resolution FermenterControl history longer than the default recorder
+# retention period.
+#
+# Home Assistant records all entities by default. If you already use recorder:
+# include/exclude filters, merge these globs into your existing recorder block.
+
+recorder:
+  purge_keep_days: 90
+  include:
+    entity_globs:
+      - sensor.fermentor_*_temperature
+      - sensor.fermentor_*_setpoint
+      - sensor.fermentor_*_density
+      - sensor.fermentor_*_density_change
+      - sensor.fermentor_*_output
+      - binary_sensor.fermentor_*_heating
+      - binary_sensor.fermentor_*_cooling
+      - binary_sensor.fermentor_*_alarm_active
+      - binary_sensor.fermentor_*_temperature_alarm
+      - binary_sensor.fermentor_*_sensor_alarm
