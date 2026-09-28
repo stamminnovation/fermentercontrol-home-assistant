@@ -86,3 +86,26 @@ Bestehende Automationen verwenden anschließend die aktualisierte Blueprint nach
 
 FermenterControl  
 STAMM INNOVATION
+
+
+## Messdaten exportieren
+
+Home Assistant speichert die FermenterControl-Entities über den Recorder. Im **Verlauf / History**-Panel können gewünschte Fermenter-Entities und ein Zeitraum gewählt und anschließend über **Download data** als CSV exportiert werden.
+
+Home Assistant bewahrt detaillierte Recorder-Daten standardmäßig 10 Tage auf. Sensoren mit `state_class: measurement` erhalten zusätzlich Langzeitstatistiken, die stündlich aggregiert werden. FermenterControl kennzeichnet Temperatur, Solltemperatur, Dichte, Dichteänderung und Reglerausgang entsprechend.
+
+Für längere Vollauflösung liegt unter:
+
+```text
+examples/recorder-fermentorcontrol.yaml
+```
+
+eine Beispielkonfiguration mit 90 Tagen Aufbewahrung.
+
+Wichtig: Wer bereits einen `recorder:`-Block in `configuration.yaml` verwendet, darf keinen zweiten Block anlegen, sondern muss die Werte in die vorhandene Konfiguration übernehmen.
+
+## Profilsteuerung
+
+Aktuelle FermenterControl-Versionen können die auf dem Controller gespeicherte Profilbibliothek vollständig synchronisieren. Home Assistant erhält dadurch für die Profilauswahl keine numerische ID-Eingabe mehr, sondern ein dynamisches Select mit Profilname und stabiler ID.
+
+Das eigentliche Bearbeiten von Profilen bleibt in FermenterControl bzw. in der generischen External-MQTT-Schnittstelle. Home Assistant ist bewusst auf Auswahl, Start und Stop des Profils fokussiert.
