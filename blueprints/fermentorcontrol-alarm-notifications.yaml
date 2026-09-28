@@ -1,0 +1,154 @@
+blueprint:
+  name: FermenterControl – Alarmbenachrichtigungen
+  description: >-
+    Sendet Benachrichtigungen bei Fermenter-Alarm, Controller-Offlinezustand
+    und optional bei Wiederherstellung. Für jeden Fermenter eine Automation
+    aus dieser Blueprint anlegen.
+  domain: automation
+  input:
+    fermenter_name:
+      name: Fermentername
+      description: Anzeigename für die Benachrichtigung.
+      default: Fermenter
+      selector:
+        text:
+
+    alarm_sensor:
+      name: Alarm aktiv
+      description: Die FermenterControl-Entity "Alarm aktiv".
+      selector:
+        entity:
+          filter:
+            - domain: binary_sensor
+              device_class: problem
+
+    alarm_text:
+      name: Alarmtext
+      description: Die FermenterControl-Entity "Alarme".
+      selector:
+        entity:
+          filter:
+            - domain: sensor
+
+    online_sensor:
+      name: Controller online
+      description: Die FermenterControl-Entity "Controller online".
+      selector:
+        entity:
+          filter:
+            - domain: binary_sensor
+              device_class: connectivity
+
+    notify_target:
+      name: Benachrichtigungsziel
+      description: Notify-Entity, z. B. die Home-Assistant-Companion-App.
+      selector:
+        target:
+          entity:
+            - domain: notify
+
+    offline_delay:
+      name: Offline-Verzögerung
+      description: Erst nach dieser Zeit ohne Controller-Verbindung benachrichtigen.
+      default: 2
+      selector:
+        number:
+          min: 0
+          max: 60
+          step: 1
+          unit_of_measurement: min
+          mode: box
+
+    send_recovery:
+      name: Wiederherstellung melden
+      description: Meldung senden, wenn Alarm behoben bzw. Controller wieder online ist.
+      default: true
+      selector:
+        boolean:
+
+variables:
+  fermenter_name: !input fermenter_name
+  alarm_text_entity: !input alarm_text
+  send_recovery: !input send_recovery
+
+triggers:
+  - trigger: state
+    entity_id: !input alarm_sensor
+    to: "on"
+    id: alarm
+
+  - trigger: state
+    entity_id: !input alarm_sensor
+    from: "on"
+    to: "off"
+    id: alarm_clear
+
+  - trigger: state
+    entity_id: !input online_sensor
+    to: "off"
+    for:
+      minutes: !input offline_delay
+    id: offline
+
+  - trigger: state
+    entity_id: !input online_sensor
+    to: "unavailable"
+    for:
+      minutes: !input offline_delay
+    id: offline
+
+  - trigger: state
+    entity_id: !input online_sensor
+    to: "on"
+    id: online
+
+conditions: []
+
+actions:
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.id == 'alarm' }}"
+        sequence:
+          - action: notify.send_message
+            target: !input notify_target
+            data:
+              title: "FermenterControl – {{ fermenter_name }}"
+              message: >-
+                Alarm: {{ states(alarm_text_entity) }}
+
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.id == 'offline' }}"
+        sequence:
+          - action: notify.send_message
+            target: !input notify_target
+            data:
+              title: "FermenterControl – {{ fermenter_name }}"
+              message: "Controller ist offline."
+
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.id == 'alarm_clear' and send_recovery }}"
+        sequence:
+          - action: notify.send_message
+            target: !input notify_target
+            data:
+              title: "FermenterControl – {{ fermenter_name }}"
+              message: "Alarm wurde behoben bzw. quittiert."
+
+      - conditions:
+          - condition: template
+            value_template: >-
+              {{ trigger.id == 'online'
+                 and send_recovery
+                 and trigger.from_state is not none
+                 and trigger.from_state.state in ['off', 'unavailable'] }}
+        sequence:
+          - action: notify.send_message
+            target: !input notify_target
+            data:
+              title: "FermenterControl – {{ fermenter_name }}"
+              message: "Controller ist wieder online."
+
+mode: restart
