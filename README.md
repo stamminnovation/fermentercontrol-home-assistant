@@ -109,3 +109,47 @@ Wichtig: Wer bereits einen `recorder:`-Block in `configuration.yaml` verwendet, 
 Aktuelle FermenterControl-Versionen können die auf dem Controller gespeicherte Profilbibliothek vollständig synchronisieren. Home Assistant erhält dadurch für die Profilauswahl keine numerische ID-Eingabe mehr, sondern ein dynamisches Select mit Profilname und stabiler ID.
 
 Das eigentliche Bearbeiten von Profilen bleibt in FermenterControl bzw. in der generischen External-MQTT-Schnittstelle. Home Assistant ist bewusst auf Auswahl, Start und Stop des Profils fokussiert.
+
+
+## Zentrales Profilarchiv in Home Assistant
+
+FermenterControl kann das zentrale Profilarchiv per MQTT Discovery als eigenes Home-Assistant-Gerät bereitstellen.
+
+Gerät:
+
+```text
+FermenterControl Profilarchiv
+```
+
+Typische Entities:
+
+```text
+sensor.fermentorcontrol_profile_archive_count
+sensor.fermentorcontrol_profile_archive_selected
+sensor.fermentorcontrol_profile_archive_target
+binary_sensor.fermentorcontrol_profile_archive_target_writable
+select.fermentorcontrol_profile_archive_profile
+select.fermentorcontrol_profile_archive_target
+button.fermentorcontrol_profile_archive_distribute
+button.fermentorcontrol_profile_archive_delete
+button.fermentorcontrol_profile_archive_refresh
+sensor.fermentorcontrol_profile_archive_command_result
+```
+
+Außerdem kann jedes Fermenter-Gerät einen Button
+
+```text
+button.fermentor_<id>_profile_archive
+```
+
+erhalten. Dieser übernimmt das aktuell ausgewählte Controllerprofil in das zentrale Archiv.
+
+Voraussetzungen in **FermenterControl → External MQTT → Externe Steuerungsrechte**:
+
+- **Profile anzeigen** für das Archiv-Gerät
+- **Profile anlegen** für Archivieren und Verteilen
+- **Profile löschen** nur dann, wenn Löschen aus Home Assistant erlaubt sein soll
+
+Das automatisch generierte FermenterControl-Dashboard enthält einen eigenen Tab **Profilarchiv**. Destruktive Aktionen werden dort mit einer Bestätigungsabfrage versehen.
+
+Der vollständige Mehrschritt-Editor bleibt in FermenterControl; Home Assistant dient für schnelle Auswahl, Archivierung und Verteilung.
