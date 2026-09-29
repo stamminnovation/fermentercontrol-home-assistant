@@ -110,6 +110,20 @@ Aktuelle FermenterControl-Versionen können die auf dem Controller gespeicherte 
 
 Das eigentliche Bearbeiten von Profilen bleibt in FermenterControl bzw. in der generischen External-MQTT-Schnittstelle. Home Assistant ist bewusst auf Auswahl, Start und Stop des Profils fokussiert.
 
+### Profilfortschritt
+
+FermenterControl stellt pro Fermenter zusätzlich den per MQTT Discovery angelegten Sensor
+
+```text
+sensor.fermentor_<id>_profile_progress
+```
+
+bereit. Der Wert liegt zwischen `0` und `100 %`.
+
+Bei zeitgesteuerten Profilschritten wird der Fortschritt innerhalb des aktuellen Schritts aus verstrichener und verbleibender Zeit interpoliert. Bei dichte- oder dichteänderungsabhängigen Schritten wird bewusst keine künstliche Zeitprognose erzeugt; der Gesamtfortschritt bleibt dort am Beginn des aktuellen Schritts und springt weiter, sobald FermenterControl den nächsten Schritt meldet.
+
+Das automatisch generierte Home-Assistant-Dashboard zeigt den Wert sowohl in der Fermenterübersicht als auch im Profilbereich als Fortschrittsbalken an. Dafür sind keine HACS-Karten erforderlich.
+
 
 ## Zentrales Profilarchiv in Home Assistant
 
