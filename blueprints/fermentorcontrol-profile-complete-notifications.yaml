@@ -1,0 +1,66 @@
+blueprint:
+  name: FermenterControl – Profil abgeschlossen
+  description: >-
+    Sendet genau einmal eine Benachrichtigung, wenn ein FermenterControl-Profil
+    seinen letzten Profilschritt abgeschlossen hat. Für jeden Fermenter eine
+    Automation aus dieser Blueprint anlegen.
+  domain: automation
+  input:
+    fermenter_name:
+      name: Fermentername
+      description: Anzeigename für die Benachrichtigung.
+      default: Fermenter
+      selector:
+        text:
+
+    profile_complete_sensor:
+      name: Profil abgeschlossen
+      description: Die FermenterControl-Entity "Profil abgeschlossen".
+      selector:
+        entity:
+          filter:
+            - domain: binary_sensor
+
+    profile_name_sensor:
+      name: Profilname
+      description: Die FermenterControl-Entity "Profil".
+      selector:
+        entity:
+          filter:
+            - domain: sensor
+
+    notify_target:
+      name: Benachrichtigungsziel
+      description: Notify-Entity, z. B. die Home-Assistant-Companion-App.
+      selector:
+        target:
+          entity:
+            - domain: notify
+
+variables:
+  fermenter_name: !input fermenter_name
+  profile_name_entity: !input profile_name_sensor
+
+triggers:
+  - trigger: state
+    entity_id: !input profile_complete_sensor
+    from: "off"
+    to: "on"
+    id: profile_complete
+
+conditions: []
+
+actions:
+  - action: notify.send_message
+    target: !input notify_target
+    data:
+      title: "FermenterControl – {{ fermenter_name }}"
+      message: >-
+        {% set profile_name = states(profile_name_entity) %}
+        {% if profile_name not in ['unknown', 'unavailable', 'none', ''] %}
+          Profil „{{ profile_name }}“ ist abgeschlossen. Der letzte Profilschritt wurde beendet.
+        {% else %}
+          Das Gärprofil ist abgeschlossen. Der letzte Profilschritt wurde beendet.
+        {% endif %}
+
+mode: single
