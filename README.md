@@ -271,3 +271,44 @@ Der letzte Profilschritt wurde beendet.
 ```
 
 Für jeden Fermenter wird wie bei den Alarmbenachrichtigungen eine eigene Automation aus der Blueprint angelegt.
+
+
+## Zentrale Profilabschluss-Benachrichtigung für alle Fermenter
+
+Empfohlen ist die zentrale Blueprint:
+
+```text
+blueprints/fermentorcontrol-profile-complete-central.yaml
+```
+
+One-Click-Import:
+
+```text
+https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fstamminnovation%2Ffermentorcontrol-home-assistant%2Fblob%2Fmain%2Fblueprints%2Ffermentorcontrol-profile-complete-central.yaml
+```
+
+FermenterControl veröffentlicht bei jedem echten Übergang eines beliebigen Fermenters von `profile.complete = false` auf `true` ein nicht-retained MQTT-Ereignis:
+
+```text
+fermentorcontrol/events/profile_complete
+```
+
+Home Assistant erhält per MQTT Discovery dafür genau eine zentrale Event-Entity:
+
+```text
+event.fermentorcontrol_profile_complete
+```
+
+Das Event enthält unter anderem:
+
+- `fermenterId`
+- `fermenterName`
+- `profileId`
+- `profileName`
+- `profileStep`
+- `profileSteps`
+- `timestamp`
+
+Damit reicht **eine einzige Home-Assistant-Automation** für alle aktuellen und künftig hinzukommenden Fermenter. In der Automation muss nur die zentrale Event-Entity und das gewünschte Notify-Ziel ausgewählt werden.
+
+Die Ereignisse werden nicht retained veröffentlicht. Beim Start von FermenterControl wird der vorhandene Profilstatus nur als Ausgangszustand übernommen; ein bereits früher abgeschlossenes Profil erzeugt deshalb keine nachträgliche Push-Meldung.
