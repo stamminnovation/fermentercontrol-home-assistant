@@ -1,0 +1,128 @@
+blueprint:
+  name: FermenterControl – Alarme zentral
+  description: >-
+    Sendet mit nur einer Automation Benachrichtigungen für Alarme,
+    Alarmbehebung sowie Controller-Offline-/Onlineereignisse aller
+    FermenterControl-Fermenter.
+  domain: automation
+  input:
+    alarm_event:
+      name: Zentrales Alarmereignis
+      description: Die MQTT-Event-Entity "FermenterControl Ereignisse → Alarmereignis".
+      selector:
+        entity:
+          filter:
+            - domain: event
+
+    notify_target:
+      name: Benachrichtigungsziel
+      description: Notify-Entity, z. B. die Home-Assistant-Companion-App.
+      selector:
+        target:
+          entity:
+            - domain: notify
+
+    send_recovery:
+      name: Wiederherstellung melden
+      description: Meldung senden, wenn ein Alarm behoben oder ein Controller wieder online ist.
+      default: true
+      selector:
+        boolean:
+
+    send_connectivity:
+      name: Verbindungsereignisse melden
+      description: Controller offline/online als Benachrichtigung senden.
+      default: true
+      selector:
+        boolean:
+
+variables:
+  send_recovery: !input send_recovery
+  send_connectivity: !input send_connectivity
+
+triggers:
+  - trigger: state
+    entity_id: !input alarm_event
+    id: central_event
+
+conditions:
+  - condition: template
+    value_template: >-
+      {{ trigger.to_state is not none
+         and trigger.to_state.attributes.event_type
+            in ['alarm', 'alarm_clear', 'offline', 'online'] }}
+
+actions:
+  - variables:
+      event_type: "{{ trigger.to_state.attributes.event_type }}"
+      fermenter_id: "{{ trigger.to_state.attributes.fermenterId | default('') }}"
+      fermenter_name: >-
+        {{ trigger.to_state.attributes.fermenterName
+           | default(trigger.to_state.attributes.fermenterId)
+           | default('Fermenter') }}
+
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: "{{ event_type == 'alarm' }}"
+        sequence:
+          - action: notify.send_message
+            target: !input notify_target
+            data:
+              title: "FermenterControl – {{ fermenter_name }}"
+              message: >-
+                {% set alarm_text = trigger.to_state.attributes.alarmText | default('', true) %}
+                {% set sensor = trigger.to_state.attributes.sensorAlarm | default({}) %}
+                {% set temp = trigger.to_state.attributes.temperatureAlarm | default({}) %}
+                {% if alarm_text %}
+                  Alarm: {{ alarm_text }}
+                {% elif sensor.get('active', false) %}
+                  Sensoralarm{% if sensor.get('triggerRole') %} – {{ sensor.get('triggerRole') }}{% endif %}{% if sensor.get('triggerReason') %}: {{ sensor.get('triggerReason') }}{% endif %}.
+                {% elif temp.get('active', false) %}
+                  Temperaturabweichung erkannt{% if temp.get('triggerDeviationC') is not none %}: {{ temp.get('triggerDeviationC') }} °C{% endif %}.
+                {% else %}
+                  Fermenter-Alarm ausgelöst.
+                {% endif %}
+                {% if fermenter_id %} Fermenter: {{ fermenter_id }}.{% endif %}
+
+      - conditions:
+          - condition: template
+            value_template: "{{ event_type == 'alarm_clear' and send_recovery }}"
+        sequence:
+          - action: notify.send_message
+            target: !input notify_target
+            data:
+              title: "FermenterControl – {{ fermenter_name }}"
+              message: >-
+                Alarm wurde behoben bzw. quittiert.
+                {% if fermenter_id %} Fermenter: {{ fermenter_id }}.{% endif %}
+
+      - conditions:
+          - condition: template
+            value_template: "{{ event_type == 'offline' and send_connectivity }}"
+        sequence:
+          - action: notify.send_message
+            target: !input notify_target
+            data:
+              title: "FermenterControl – {{ fermenter_name }}"
+              message: >-
+                Controller ist offline.
+                {% if fermenter_id %} Fermenter: {{ fermenter_id }}.{% endif %}
+
+      - conditions:
+          - condition: template
+            value_template: >-
+              {{ event_type == 'online'
+                 and send_connectivity
+                 and send_recovery }}
+        sequence:
+          - action: notify.send_message
+            target: !input notify_target
+            data:
+              title: "FermenterControl – {{ fermenter_name }}"
+              message: >-
+                Controller ist wieder online.
+                {% if fermenter_id %} Fermenter: {{ fermenter_id }}.{% endif %}
+
+mode: queued
+max: 50
