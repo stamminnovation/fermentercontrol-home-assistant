@@ -248,7 +248,7 @@ Die Blueprint verwendet:
 
 ```text
 binary_sensor.fermentor_<id>_profile_complete
-sensor.fermentor_<id>_profile
+sensor.fermentor_<id>_profile_name
 ```
 
 und ein frei wählbares `notify`-Ziel.
