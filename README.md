@@ -228,3 +228,46 @@ text.fermentorcontrol_profile_archive_editor_density_change
 werden absichtlich als MQTT Text statt MQTT Number bereitgestellt, weil Home Assistant für MQTT Number derzeit keine Schrittweite kleiner als `0.001` akzeptiert. FermenterControl benötigt für Dichtebedingungen bis zu vier bzw. fünf Nachkommastellen.
 
 Die Felder akzeptieren Dezimalpunkt und Dezimalkomma.
+
+
+## Profilabschluss-Benachrichtigung
+
+Für das Ende eines Gärprofils gibt es eine separate Blueprint:
+
+```text
+blueprints/fermentorcontrol-profile-complete-notifications.yaml
+```
+
+One-Click-Import:
+
+```text
+https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fstamminnovation%2Ffermentorcontrol-home-assistant%2Fblob%2Fmain%2Fblueprints%2Ffermentorcontrol-profile-complete-notifications.yaml
+```
+
+Die Blueprint verwendet:
+
+```text
+binary_sensor.fermentor_<id>_profile_complete
+sensor.fermentor_<id>_profile
+```
+
+und ein frei wählbares `notify`-Ziel.
+
+Die Benachrichtigung wird ausschließlich beim Zustandswechsel
+
+```text
+off → on
+```
+
+von **Profil abgeschlossen** ausgelöst. Dadurch erzeugt ein nach Home-Assistant-Neustart erneut eingelesener retained MQTT-Zustand keine zweite Abschlussmeldung.
+
+Beispielmeldung:
+
+```text
+FermenterControl – Fermenter F01
+
+Profil „Lager Standard“ ist abgeschlossen.
+Der letzte Profilschritt wurde beendet.
+```
+
+Für jeden Fermenter wird wie bei den Alarmbenachrichtigungen eine eigene Automation aus der Blueprint angelegt.
