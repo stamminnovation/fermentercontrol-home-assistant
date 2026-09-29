@@ -371,3 +371,18 @@ Damit reicht **eine einzige Automation** für alle aktuellen und zukünftigen Fe
 Beim Start von FermenterControl werden vorhandene Alarm- und Verbindungszustände nur als Ausgangszustand übernommen. Bereits bestehende Alarme erzeugen dadurch keine nachträgliche Pushmeldung.
 
 Die ältere Blueprint `fermentorcontrol-alarm-notifications.yaml` bleibt für bestehende Installationen erhalten, ist für neue Setups aber nicht mehr erforderlich.
+
+
+## Alarm aus Home Assistant quittieren
+
+Wenn in FermenterControl das External-MQTT-Recht **Alarm quittieren** aktiviert ist, erhält jeder Fermenter:
+
+```text
+button.fermentor_<id>_alarm_acknowledge
+```
+
+Der Button quittiert die aktuell aktiven Temperatur- und/oder Sensoralarme genau dieses Fermenters.
+
+Im von FermenterControl generierten Dashboard liegt der Button in der Alarmsektion und besitzt eine Bestätigungsabfrage.
+
+Die zentrale Alarm-Blueprint bleibt für Benachrichtigungen zuständig; die Quittierung erfolgt bewusst über den eindeutig einem Fermenter zugeordneten Button, damit bei mehreren gleichzeitigen Alarmen nicht versehentlich der falsche Controller quittiert wird.
