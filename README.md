@@ -205,3 +205,26 @@ Der Editierpuffer liegt in FermenterControl. Home Assistant schreibt daher nicht
 Zusätzlich schützt FermenterControl vor parallelen Änderungen: Wird das Profil nach Öffnen des Editors an anderer Stelle verändert, wird **Bearbeitungskonflikt** aktiv und ein veralteter Entwurf kann nicht gespeichert werden.
 
 Der automatisch generierte Dashboard-Tab **Profilarchiv** enthält den Editor bereits vollständig; es sind keine HACS-Karten oder manuell angelegten Helper erforderlich.
+
+
+### Neues Profil direkt aus Home Assistant
+
+Mit aktiviertem Recht **Profile anlegen** erscheint im Profilarchiv zusätzlich:
+
+```text
+button.fermentorcontrol_profile_archive_editor_new
+binary_sensor.fermentorcontrol_profile_archive_editor_new_profile
+```
+
+Der Button **Neues Profil anlegen** öffnet einen editierbaren Entwurf mit einem Standardschritt. Erst **Profiländerungen speichern** legt daraus eine neue zentrale Archivvorlage an.
+
+Die beiden hochauflösenden Profilwerte
+
+```text
+text.fermentorcontrol_profile_archive_editor_density_target
+text.fermentorcontrol_profile_archive_editor_density_change
+```
+
+werden absichtlich als MQTT Text statt MQTT Number bereitgestellt, weil Home Assistant für MQTT Number derzeit keine Schrittweite kleiner als `0.001` akzeptiert. FermenterControl benötigt für Dichtebedingungen bis zu vier bzw. fünf Nachkommastellen.
+
+Die Felder akzeptieren Dezimalpunkt und Dezimalkomma.
