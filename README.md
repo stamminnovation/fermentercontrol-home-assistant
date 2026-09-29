@@ -312,3 +312,62 @@ Das Event enthält unter anderem:
 Damit reicht **eine einzige Home-Assistant-Automation** für alle aktuellen und künftig hinzukommenden Fermenter. In der Automation muss nur die zentrale Event-Entity und das gewünschte Notify-Ziel ausgewählt werden.
 
 Die Ereignisse werden nicht retained veröffentlicht. Beim Start von FermenterControl wird der vorhandene Profilstatus nur als Ausgangszustand übernommen; ein bereits früher abgeschlossenes Profil erzeugt deshalb keine nachträgliche Push-Meldung.
+
+
+## Zentrale Alarmbenachrichtigungen für alle Fermenter
+
+Empfohlen ist die zentrale Blueprint:
+
+```text
+blueprints/fermentorcontrol-alarm-notifications-central.yaml
+```
+
+One-Click-Import:
+
+```text
+https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fstamminnovation%2Ffermentorcontrol-home-assistant%2Fblob%2Fmain%2Fblueprints%2Ffermentorcontrol-alarm-notifications-central.yaml
+```
+
+FermenterControl veröffentlicht zentrale, nicht-retained Ereignisse unter:
+
+```text
+fermentorcontrol/events/alarm
+```
+
+Home Assistant entdeckt dafür:
+
+```text
+event.fermentorcontrol_alarm
+```
+
+Unterstützte Eventtypen:
+
+```text
+alarm
+alarm_clear
+offline
+online
+```
+
+Das Event enthält je nach Ursache unter anderem:
+
+- `fermenterId`
+- `fermenterName`
+- `alarmText`
+- `temperatureAlarm.active`
+- `temperatureAlarm.thresholdC`
+- `temperatureAlarm.triggerDeviationC`
+- `temperatureAlarm.triggerTemperatureC`
+- `temperatureAlarm.triggerSetpointC`
+- `sensorAlarm.active`
+- `sensorAlarm.triggerRole`
+- `sensorAlarm.triggerReason`
+- `sensorAlarm.temperatureSource`
+- `connectionStatus`
+- `timestamp`
+
+Damit reicht **eine einzige Automation** für alle aktuellen und zukünftigen Fermenter.
+
+Beim Start von FermenterControl werden vorhandene Alarm- und Verbindungszustände nur als Ausgangszustand übernommen. Bereits bestehende Alarme erzeugen dadurch keine nachträgliche Pushmeldung.
+
+Die ältere Blueprint `fermentorcontrol-alarm-notifications.yaml` bleibt für bestehende Installationen erhalten, ist für neue Setups aber nicht mehr erforderlich.
