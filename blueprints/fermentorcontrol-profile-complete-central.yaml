@@ -1,0 +1,60 @@
+blueprint:
+  name: FermenterControl – Profilabschluss zentral
+  description: >-
+    Sendet mit nur einer Automation Benachrichtigungen, wenn bei einem beliebigen
+    FermenterControl-Fermenter der letzte Profilschritt abgeschlossen wurde.
+  domain: automation
+  input:
+    profile_complete_event:
+      name: Zentrales Profilabschluss-Ereignis
+      description: Die MQTT-Event-Entity "FermenterControl Ereignisse → Profil abgeschlossen".
+      selector:
+        entity:
+          filter:
+            - domain: event
+
+    notify_target:
+      name: Benachrichtigungsziel
+      description: Notify-Entity, z. B. die Home-Assistant-Companion-App.
+      selector:
+        target:
+          entity:
+            - domain: notify
+
+triggers:
+  - trigger: state
+    entity_id: !input profile_complete_event
+    id: profile_complete
+
+conditions:
+  - condition: template
+    value_template: >-
+      {{ trigger.to_state is not none
+         and trigger.to_state.attributes.event_type == 'profile_complete' }}
+
+actions:
+  - variables:
+      fermenter_id: "{{ trigger.to_state.attributes.fermenterId | default('') }}"
+      fermenter_name: >-
+        {{ trigger.to_state.attributes.fermenterName
+           | default(trigger.to_state.attributes.fermenterId)
+           | default('Fermenter') }}
+      profile_name: "{{ trigger.to_state.attributes.profileName | default('') }}"
+      profile_step: "{{ trigger.to_state.attributes.profileStep | default(0) }}"
+      profile_steps: "{{ trigger.to_state.attributes.profileSteps | default(0) }}"
+
+  - action: notify.send_message
+    target: !input notify_target
+    data:
+      title: "FermenterControl – {{ fermenter_name }}"
+      message: >-
+        {% if profile_name not in ['', 'unknown', 'unavailable', none] %}
+          Profil „{{ profile_name }}“ ist abgeschlossen.
+        {% else %}
+          Das Gärprofil ist abgeschlossen.
+        {% endif %}
+        Der letzte Profilschritt wurde beendet.
+        {% if fermenter_id %} Fermenter: {{ fermenter_id }}.{% endif %}
+
+mode: queued
+max: 20
