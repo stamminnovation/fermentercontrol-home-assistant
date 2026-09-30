@@ -176,7 +176,7 @@ Bei aktiviertem Recht **Profile bearbeiten** stellt FermenterControl per MQTT Di
 Der Editor arbeitet mit einem retained Entwurfszustand:
 
 ```text
-fermentorcontrol/profile-archive/editor/state
+fermentercontrol/profile-archive/editor/state
 ```
 
 Typische Entities:
@@ -304,7 +304,7 @@ https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2
 FermenterControl veröffentlicht bei jedem echten Übergang eines beliebigen Fermenters von `profile.complete = false` auf `true` ein nicht-retained MQTT-Ereignis:
 
 ```text
-fermentorcontrol/events/profile_complete
+fermentercontrol/events/profile_complete
 ```
 
 Home Assistant erhält per MQTT Discovery dafür genau eine zentrale Event-Entity:
@@ -345,7 +345,7 @@ https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2
 FermenterControl veröffentlicht zentrale, nicht-retained Ereignisse unter:
 
 ```text
-fermentorcontrol/events/alarm
+fermentercontrol/events/alarm
 ```
 
 Home Assistant entdeckt dafür:
@@ -400,3 +400,23 @@ Der Button quittiert die aktuell aktiven Temperatur- und/oder Sensoralarme genau
 Im von FermenterControl generierten Dashboard liegt der Button in der Alarmsektion und besitzt eine Bestätigungsabfrage.
 
 Die zentrale Alarm-Blueprint bleibt für Benachrichtigungen zuständig; die Quittierung erfolgt bewusst über den eindeutig einem Fermenter zugeordneten Button, damit bei mehreren gleichzeitigen Alarmen nicht versehentlich der falsche Controller quittiert wird.
+
+
+## MQTT-Basistopic: fermentercontrol
+
+Der neue Standard für Zustände, Befehle, Profilarchiv und Ereignisse ist
+`fermentercontrol/...`. Das Basistopic wird in Fermenter Control unter
+**External MQTT → Base Topic** gesetzt. Bereits gespeicherte Einstellungen
+werden nicht automatisch durch neue `.env`-Defaults ersetzt.
+
+Vor der Umstellung die Brokerrechte für Publisher und Subscriber auf das neue
+Präfix erweitern. Anschließend das Backend-Basistopic ändern und die passende
+MBFC-Version veröffentlichen. Home Assistant erhält die neuen Topics per MQTT
+Discovery. Die Blueprints reagieren auf ausgewählte Entities; ihre Trigger
+brauchen deshalb keine manuell angepassten MQTT-Topics.
+
+Discovery-IDs und Entity-IDs bleiben in diesem Migrationsschritt stabil.
+Bestehende Automationen, Dashboards und Recorder-Zuordnungen bleiben damit
+erhalten. Repository-/Dateinamen, Benutzer und Datenbanknamen werden getrennt
+umgestellt. Die internen Controller-Topics `riprapt/...` bleiben bestehen.
+Alte retained Topics erst nach erfolgreicher Prüfung gezielt entfernen.
