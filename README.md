@@ -16,7 +16,7 @@ Die Blueprint erzeugt pro Fermenter eine Home-Assistant-Automation für:
 
 ### Direkt in Home Assistant importieren
 
-[Blueprint in Home Assistant importieren](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fstamminnovation%2Ffermentorcontrol-home-assistant%2Fblob%2Fmain%2Fblueprints%2Ffermentorcontrol-alarm-notifications.yaml)
+[Blueprint in Home Assistant importieren](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fstamminnovation%2Ffermentercontrol-home-assistant%2Fblob%2Fmain%2Fblueprints%2Ffermentorcontrol-alarm-notifications.yaml)
 
 Alternativ in Home Assistant:
 
@@ -25,7 +25,7 @@ Alternativ in Home Assistant:
 3. Folgende URL einfügen:
 
 ```text
-https://github.com/stamminnovation/fermentorcontrol-home-assistant/blob/main/blueprints/fermentorcontrol-alarm-notifications.yaml
+https://github.com/stamminnovation/fermentercontrol-home-assistant/blob/main/blueprints/fermentorcontrol-alarm-notifications.yaml
 ```
 
 4. **Vorschau**
@@ -70,7 +70,7 @@ blueprints/fermentorcontrol-alarm-notifications.yaml
 
 GitHub:
 
-https://github.com/stamminnovation/fermentorcontrol-home-assistant/blob/main/blueprints/fermentorcontrol-alarm-notifications.yaml
+https://github.com/stamminnovation/fermentercontrol-home-assistant/blob/main/blueprints/fermentorcontrol-alarm-notifications.yaml
 
 ## Aktualisierungen
 
@@ -255,7 +255,7 @@ blueprints/fermentorcontrol-profile-complete-notifications.yaml
 One-Click-Import:
 
 ```text
-https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fstamminnovation%2Ffermentorcontrol-home-assistant%2Fblob%2Fmain%2Fblueprints%2Ffermentorcontrol-profile-complete-notifications.yaml
+https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fstamminnovation%2Ffermentercontrol-home-assistant%2Fblob%2Fmain%2Fblueprints%2Ffermentorcontrol-profile-complete-notifications.yaml
 ```
 
 Die Blueprint verwendet:
@@ -298,7 +298,7 @@ blueprints/fermentorcontrol-profile-complete-central.yaml
 One-Click-Import:
 
 ```text
-https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fstamminnovation%2Ffermentorcontrol-home-assistant%2Fblob%2Fmain%2Fblueprints%2Ffermentorcontrol-profile-complete-central.yaml
+https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fstamminnovation%2Ffermentercontrol-home-assistant%2Fblob%2Fmain%2Fblueprints%2Ffermentorcontrol-profile-complete-central.yaml
 ```
 
 FermenterControl veröffentlicht bei jedem echten Übergang eines beliebigen Fermenters von `profile.complete = false` auf `true` ein nicht-retained MQTT-Ereignis:
@@ -339,7 +339,7 @@ blueprints/fermentorcontrol-alarm-notifications-central.yaml
 One-Click-Import:
 
 ```text
-https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fstamminnovation%2Ffermentorcontrol-home-assistant%2Fblob%2Fmain%2Fblueprints%2Ffermentorcontrol-alarm-notifications-central.yaml
+https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fstamminnovation%2Ffermentercontrol-home-assistant%2Fblob%2Fmain%2Fblueprints%2Ffermentorcontrol-alarm-notifications-central.yaml
 ```
 
 FermenterControl veröffentlicht zentrale, nicht-retained Ereignisse unter:
