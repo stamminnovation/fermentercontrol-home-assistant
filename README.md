@@ -16,7 +16,7 @@ Die Blueprint erzeugt pro Fermenter eine Home-Assistant-Automation für:
 
 ### Direkt in Home Assistant importieren
 
-[Blueprint in Home Assistant importieren](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fstamminnovation%2Ffermentercontrol-home-assistant%2Fblob%2Fmain%2Fblueprints%2Ffermentorcontrol-alarm-notifications.yaml)
+[Blueprint in Home Assistant importieren](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fstamminnovation%2Ffermentercontrol-home-assistant%2Fblob%2Fmain%2Fblueprints%2Ffermentercontrol-alarm-notifications.yaml)
 
 Alternativ in Home Assistant:
 
@@ -25,7 +25,7 @@ Alternativ in Home Assistant:
 3. Folgende URL einfügen:
 
 ```text
-https://github.com/stamminnovation/fermentercontrol-home-assistant/blob/main/blueprints/fermentorcontrol-alarm-notifications.yaml
+https://github.com/stamminnovation/fermentercontrol-home-assistant/blob/main/blueprints/fermentercontrol-alarm-notifications.yaml
 ```
 
 4. **Vorschau**
@@ -38,13 +38,13 @@ Für einen Fermenter werden typischerweise diese durch MQTT Discovery angelegten
 
 ```text
 Alarm aktiv:
-binary_sensor.fermentor_f01_alarm_active
+binary_sensor.fermenter_f01_alarm_active
 
 Alarmtext:
-sensor.fermentor_f01_alarms
+sensor.fermenter_f01_alarms
 
 Controller online:
-binary_sensor.fermentor_f01_online
+binary_sensor.fermenter_f01_online
 ```
 
 Zusätzlich wird ein `notify`-Ziel ausgewählt, beispielsweise eine Notify-Entity der Home-Assistant-Companion-App.
@@ -65,12 +65,12 @@ FermenterControl übermittelt die Alarmzustände aus denselben Alarmmodulen, die
 Quelldatei:
 
 ```text
-blueprints/fermentorcontrol-alarm-notifications.yaml
+blueprints/fermentercontrol-alarm-notifications.yaml
 ```
 
 GitHub:
 
-https://github.com/stamminnovation/fermentercontrol-home-assistant/blob/main/blueprints/fermentorcontrol-alarm-notifications.yaml
+https://github.com/stamminnovation/fermentercontrol-home-assistant/blob/main/blueprints/fermentercontrol-alarm-notifications.yaml
 
 ## Aktualisierungen
 
@@ -97,7 +97,7 @@ Home Assistant bewahrt detaillierte Recorder-Daten standardmäßig 10 Tage auf. 
 Für längere Vollauflösung liegt unter:
 
 ```text
-examples/recorder-fermentorcontrol.yaml
+examples/recorder-fermentercontrol.yaml
 ```
 
 eine Beispielkonfiguration mit 90 Tagen Aufbewahrung.
@@ -115,7 +115,7 @@ Das eigentliche Bearbeiten von Profilen bleibt in FermenterControl bzw. in der g
 FermenterControl stellt pro Fermenter zusätzlich den per MQTT Discovery angelegten Sensor
 
 ```text
-sensor.fermentor_<id>_profile_progress
+sensor.fermenter_<id>_profile_progress
 ```
 
 bereit. Der Wert liegt zwischen `0` und `100 %`.
@@ -138,22 +138,22 @@ FermenterControl Profilarchiv
 Typische Entities:
 
 ```text
-sensor.fermentorcontrol_profile_archive_count
-sensor.fermentorcontrol_profile_archive_selected
-sensor.fermentorcontrol_profile_archive_target
-binary_sensor.fermentorcontrol_profile_archive_target_writable
-select.fermentorcontrol_profile_archive_profile
-select.fermentorcontrol_profile_archive_target
-button.fermentorcontrol_profile_archive_distribute
-button.fermentorcontrol_profile_archive_delete
-button.fermentorcontrol_profile_archive_refresh
-sensor.fermentorcontrol_profile_archive_command_result
+sensor.fermentercontrol_profile_archive_count
+sensor.fermentercontrol_profile_archive_selected
+sensor.fermentercontrol_profile_archive_target
+binary_sensor.fermentercontrol_profile_archive_target_writable
+select.fermentercontrol_profile_archive_profile
+select.fermentercontrol_profile_archive_target
+button.fermentercontrol_profile_archive_distribute
+button.fermentercontrol_profile_archive_delete
+button.fermentercontrol_profile_archive_refresh
+sensor.fermentercontrol_profile_archive_command_result
 ```
 
 Außerdem kann jedes Fermenter-Gerät einen Button
 
 ```text
-button.fermentor_<id>_profile_archive
+button.fermenter_<id>_profile_archive
 ```
 
 erhalten. Dieser übernimmt das aktuell ausgewählte Controllerprofil in das zentrale Archiv.
@@ -182,28 +182,28 @@ fermentercontrol/profile-archive/editor/state
 Typische Entities:
 
 ```text
-button.fermentorcontrol_profile_archive_editor_open
-binary_sensor.fermentorcontrol_profile_archive_editor_active
-binary_sensor.fermentorcontrol_profile_archive_editor_dirty
-binary_sensor.fermentorcontrol_profile_archive_editor_conflict
+button.fermentercontrol_profile_archive_editor_open
+binary_sensor.fermentercontrol_profile_archive_editor_active
+binary_sensor.fermentercontrol_profile_archive_editor_dirty
+binary_sensor.fermentercontrol_profile_archive_editor_conflict
 
-text.fermentorcontrol_profile_archive_editor_name
-number.fermentorcontrol_profile_archive_editor_tolerance
-select.fermentorcontrol_profile_archive_editor_end_behavior
+text.fermentercontrol_profile_archive_editor_name
+number.fermentercontrol_profile_archive_editor_tolerance
+select.fermentercontrol_profile_archive_editor_end_behavior
 
-sensor.fermentorcontrol_profile_archive_editor_step_count
-select.fermentorcontrol_profile_archive_editor_step
-number.fermentorcontrol_profile_archive_editor_setpoint
-number.fermentorcontrol_profile_archive_editor_duration
-select.fermentorcontrol_profile_archive_editor_timer
-select.fermentorcontrol_profile_archive_editor_advance
-number.fermentorcontrol_profile_archive_editor_density_target
-number.fermentorcontrol_profile_archive_editor_density_change
+sensor.fermentercontrol_profile_archive_editor_step_count
+select.fermentercontrol_profile_archive_editor_step
+number.fermentercontrol_profile_archive_editor_setpoint
+number.fermentercontrol_profile_archive_editor_duration
+select.fermentercontrol_profile_archive_editor_timer
+select.fermentercontrol_profile_archive_editor_advance
+number.fermentercontrol_profile_archive_editor_density_target
+number.fermentercontrol_profile_archive_editor_density_change
 
-button.fermentorcontrol_profile_archive_editor_add_step
-button.fermentorcontrol_profile_archive_editor_delete_step
-button.fermentorcontrol_profile_archive_editor_save
-button.fermentorcontrol_profile_archive_editor_cancel
+button.fermentercontrol_profile_archive_editor_add_step
+button.fermentercontrol_profile_archive_editor_delete_step
+button.fermentercontrol_profile_archive_editor_save
+button.fermentercontrol_profile_archive_editor_cancel
 ```
 
 Ablauf:
@@ -226,8 +226,8 @@ Der automatisch generierte Dashboard-Tab **Profilarchiv** enthält den Editor be
 Mit aktiviertem Recht **Profile anlegen** erscheint im Profilarchiv zusätzlich:
 
 ```text
-button.fermentorcontrol_profile_archive_editor_new
-binary_sensor.fermentorcontrol_profile_archive_editor_new_profile
+button.fermentercontrol_profile_archive_editor_new
+binary_sensor.fermentercontrol_profile_archive_editor_new_profile
 ```
 
 Der Button **Neues Profil anlegen** öffnet einen editierbaren Entwurf mit einem Standardschritt. Erst **Profiländerungen speichern** legt daraus eine neue zentrale Archivvorlage an.
@@ -235,8 +235,8 @@ Der Button **Neues Profil anlegen** öffnet einen editierbaren Entwurf mit einem
 Die beiden hochauflösenden Profilwerte
 
 ```text
-text.fermentorcontrol_profile_archive_editor_density_target
-text.fermentorcontrol_profile_archive_editor_density_change
+text.fermentercontrol_profile_archive_editor_density_target
+text.fermentercontrol_profile_archive_editor_density_change
 ```
 
 werden absichtlich als MQTT Text statt MQTT Number bereitgestellt, weil Home Assistant für MQTT Number derzeit keine Schrittweite kleiner als `0.001` akzeptiert. FermenterControl benötigt für Dichtebedingungen bis zu vier bzw. fünf Nachkommastellen.
@@ -249,20 +249,20 @@ Die Felder akzeptieren Dezimalpunkt und Dezimalkomma.
 Für das Ende eines Gärprofils gibt es eine separate Blueprint:
 
 ```text
-blueprints/fermentorcontrol-profile-complete-notifications.yaml
+blueprints/fermentercontrol-profile-complete-notifications.yaml
 ```
 
 One-Click-Import:
 
 ```text
-https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fstamminnovation%2Ffermentercontrol-home-assistant%2Fblob%2Fmain%2Fblueprints%2Ffermentorcontrol-profile-complete-notifications.yaml
+https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fstamminnovation%2Ffermentercontrol-home-assistant%2Fblob%2Fmain%2Fblueprints%2Ffermentercontrol-profile-complete-notifications.yaml
 ```
 
 Die Blueprint verwendet:
 
 ```text
-binary_sensor.fermentor_<id>_profile_complete
-sensor.fermentor_<id>_profile_name
+binary_sensor.fermenter_<id>_profile_complete
+sensor.fermenter_<id>_profile_name
 ```
 
 und ein frei wählbares `notify`-Ziel.
@@ -292,13 +292,13 @@ Für jeden Fermenter wird wie bei den Alarmbenachrichtigungen eine eigene Automa
 Empfohlen ist die zentrale Blueprint:
 
 ```text
-blueprints/fermentorcontrol-profile-complete-central.yaml
+blueprints/fermentercontrol-profile-complete-central.yaml
 ```
 
 One-Click-Import:
 
 ```text
-https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fstamminnovation%2Ffermentercontrol-home-assistant%2Fblob%2Fmain%2Fblueprints%2Ffermentorcontrol-profile-complete-central.yaml
+https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fstamminnovation%2Ffermentercontrol-home-assistant%2Fblob%2Fmain%2Fblueprints%2Ffermentercontrol-profile-complete-central.yaml
 ```
 
 FermenterControl veröffentlicht bei jedem echten Übergang eines beliebigen Fermenters von `profile.complete = false` auf `true` ein nicht-retained MQTT-Ereignis:
@@ -310,7 +310,7 @@ fermentercontrol/events/profile_complete
 Home Assistant erhält per MQTT Discovery dafür genau eine zentrale Event-Entity:
 
 ```text
-event.fermentorcontrol_profile_complete
+event.fermentercontrol_profile_complete
 ```
 
 Das Event enthält unter anderem:
@@ -333,13 +333,13 @@ Die Ereignisse werden nicht retained veröffentlicht. Beim Start von FermenterCo
 Empfohlen ist die zentrale Blueprint:
 
 ```text
-blueprints/fermentorcontrol-alarm-notifications-central.yaml
+blueprints/fermentercontrol-alarm-notifications-central.yaml
 ```
 
 One-Click-Import:
 
 ```text
-https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fstamminnovation%2Ffermentercontrol-home-assistant%2Fblob%2Fmain%2Fblueprints%2Ffermentorcontrol-alarm-notifications-central.yaml
+https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fstamminnovation%2Ffermentercontrol-home-assistant%2Fblob%2Fmain%2Fblueprints%2Ffermentercontrol-alarm-notifications-central.yaml
 ```
 
 FermenterControl veröffentlicht zentrale, nicht-retained Ereignisse unter:
@@ -351,7 +351,7 @@ fermentercontrol/events/alarm
 Home Assistant entdeckt dafür:
 
 ```text
-event.fermentorcontrol_alarm
+event.fermentercontrol_alarm
 ```
 
 Unterstützte Eventtypen:
@@ -384,7 +384,7 @@ Damit reicht **eine einzige Automation** für alle aktuellen und zukünftigen Fe
 
 Beim Start von FermenterControl werden vorhandene Alarm- und Verbindungszustände nur als Ausgangszustand übernommen. Bereits bestehende Alarme erzeugen dadurch keine nachträgliche Pushmeldung.
 
-Die ältere Blueprint `fermentorcontrol-alarm-notifications.yaml` bleibt für bestehende Installationen erhalten, ist für neue Setups aber nicht mehr erforderlich.
+Die ältere Blueprint `fermentercontrol-alarm-notifications.yaml` bleibt für bestehende Installationen erhalten, ist für neue Setups aber nicht mehr erforderlich.
 
 
 ## Alarm aus Home Assistant quittieren
@@ -392,7 +392,7 @@ Die ältere Blueprint `fermentorcontrol-alarm-notifications.yaml` bleibt für be
 Wenn in FermenterControl das External-MQTT-Recht **Alarm quittieren** aktiviert ist, erhält jeder Fermenter:
 
 ```text
-button.fermentor_<id>_alarm_acknowledge
+button.fermenter_<id>_alarm_acknowledge
 ```
 
 Der Button quittiert die aktuell aktiven Temperatur- und/oder Sensoralarme genau dieses Fermenters.
@@ -415,8 +415,9 @@ MBFC-Version veröffentlichen. Home Assistant erhält die neuen Topics per MQTT
 Discovery. Die Blueprints reagieren auf ausgewählte Entities; ihre Trigger
 brauchen deshalb keine manuell angepassten MQTT-Topics.
 
-Discovery-IDs und Entity-IDs bleiben in diesem Migrationsschritt stabil.
-Bestehende Automationen, Dashboards und Recorder-Zuordnungen bleiben damit
-erhalten. Repository-/Dateinamen, Benutzer und Datenbanknamen werden getrennt
-umgestellt. Die internen Controller-Topics `riprapt/...` bleiben bestehen.
+Discovery-IDs, Entity-IDs und Blueprint-Dateinamen verwenden jetzt die
+Schreibweise `fermenter`. Die bisherigen Zuordnungen werden bewusst nicht
+beibehalten; Blueprints neu importieren und Automationen/Dashboards in der
+Testumgebung auf die neuen Entities umstellen. Alte Entities können danach
+entfernt werden. Die internen Controller-Topics `riprapt/...` bleiben bestehen.
 Alte retained Topics erst nach erfolgreicher Prüfung gezielt entfernen.
