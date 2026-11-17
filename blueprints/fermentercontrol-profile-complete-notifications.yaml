@@ -3,7 +3,8 @@ blueprint:
   description: >-
     Sendet genau einmal eine Benachrichtigung, wenn ein FermenterControl-Profil
     seinen letzten Profilschritt abgeschlossen hat. Für jeden Fermenter eine
-    Automation aus dieser Blueprint anlegen.
+    Automation aus dieser Blueprint anlegen. Bei FCS One kann zusätzlich
+    auf die weiterlaufende Temperaturregelung hingewiesen werden.
   domain: automation
   input:
     fermenter_name:
@@ -29,6 +30,13 @@ blueprint:
           filter:
             - domain: sensor
 
+    is_fcs_one:
+      name: Brewtools FCS One
+      description: FCS One hält nach Profilabschluss den letzten Temperatursollwert.
+      default: false
+      selector:
+        boolean:
+
     notify_target:
       name: Benachrichtigungsziel
       description: Notify-Entity, z. B. die Home-Assistant-Companion-App.
@@ -40,6 +48,7 @@ blueprint:
 variables:
   fermenter_name: !input fermenter_name
   profile_name_entity: !input profile_name_sensor
+  is_fcs_one: !input is_fcs_one
 
 triggers:
   - trigger: state
@@ -61,6 +70,9 @@ actions:
           Profil „{{ profile_name }}“ ist abgeschlossen. Der letzte Profilschritt wurde beendet.
         {% else %}
           Das Gärprofil ist abgeschlossen. Der letzte Profilschritt wurde beendet.
+        {% endif %}
+        {% if is_fcs_one %}
+          Das FCS One regelt weiterhin mit dem zuletzt bestätigten Temperatursollwert.
         {% endif %}
 
 mode: single
