@@ -72,6 +72,25 @@ GitHub:
 
 https://github.com/stamminnovation/fermentercontrol-home-assistant/blob/main/blueprints/fermentercontrol-alarm-notifications.yaml
 
+## Brewtools FCS One
+
+FCS One meldet Prozesswerte und Sollwerte über Custom MQTT, aber keine
+Sensor-Konfigurations-Snapshots für den Kühlkreislauf und keine Befehle zum
+Starten oder Stoppen eines nativen Geräteprofils.
+
+- **Profilführung:** FermenterControl führt das Profil aus und übermittelt die
+  Temperatursollwerte an das FCS One. Home Assistant verwendet die von
+  FermenterControl bereitgestellten Entitäten für Profilauswahl, Start und Stopp.
+- **Profilende/Stopp:** Das FCS One regelt mit dem letzten Sollwert weiter.
+  Der zentrale Profilabschluss-Blueprint erkennt das FCS One anhand des
+  `controllerType` im Ereignis und ergänzt diesen Hinweis automatisch.
+  Beim einzelnen Profilabschluss-Blueprint dafür die Option **Brewtools FCS One** aktivieren.
+- **Kühlkreislauf:** Die Rücklaufmessung darf von einem anderen Controller
+  (z. B. F01) stammen; ein FCS One braucht keine eigene Sensorzuordnung.
+- **Druck:** Druck und Drucksollwert werden als Messwerte angezeigt. Die
+  externe Änderung des Drucksollwerts muss wegen der physischen Wirkung
+  ausdrücklich in den FermenterControl-Steuerungsrechten freigegeben werden.
+
 ## Aktualisierungen
 
 Wenn die Blueprint in diesem Repository aktualisiert wurde:
