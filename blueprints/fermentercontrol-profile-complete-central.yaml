@@ -3,6 +3,8 @@ blueprint:
   description: >-
     Sendet mit nur einer Automation Benachrichtigungen, wenn bei einem beliebigen
     FermenterControl-Fermenter der letzte Profilschritt abgeschlossen wurde.
+    Bei Brewtools FCS One wird ausdrücklich darauf hingewiesen, dass die
+    Temperaturregelung mit dem letzten Sollwert weiterläuft.
   domain: automation
   input:
     profile_complete_event:
@@ -42,6 +44,7 @@ actions:
       profile_name: "{{ trigger.to_state.attributes.profileName | default('') }}"
       profile_step: "{{ trigger.to_state.attributes.profileStep | default(0) }}"
       profile_steps: "{{ trigger.to_state.attributes.profileSteps | default(0) }}"
+      controller_type: "{{ trigger.to_state.attributes.controllerType | default('') }}"
 
   - action: notify.send_message
     target: !input notify_target
@@ -54,6 +57,9 @@ actions:
           Das Gärprofil ist abgeschlossen.
         {% endif %}
         Der letzte Profilschritt wurde beendet.
+        {% if controller_type == 'brewtools-fcs' %}
+          Das FCS One regelt weiterhin mit dem zuletzt bestätigten Temperatursollwert.
+        {% endif %}
         {% if fermenter_id %} Fermenter: {{ fermenter_id }}.{% endif %}
 
 mode: queued
